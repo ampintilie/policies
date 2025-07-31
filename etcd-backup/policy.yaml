@@ -11,6 +11,7 @@ spec:
         kind: Namespace
         metadata:
           name: ocp-etcd-backup
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -20,13 +21,88 @@ spec:
           remediationAction: enforce
           severity: low
           object-templates:
+            # ServiceAccount
             - complianceType: musthave
               objectDefinition:
-                {{ fromFile "etcd-pvc.yaml" }}
+                apiVersion: v1
+                kind: ServiceAccount
+                metadata:
+                  name: etcd-backup
+                  namespace: ocp-etcd-backup
+
+            # ClusterRole
             - complianceType: musthave
               objectDefinition:
-                {{ fromFile "serviceaccount.yaml" }}
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: ClusterRole
+                metadata:
+                  name: etcd-backup
+                rules:
+                  - apiGroups: ["*"]
+                    resources: ["nodes", "pods", "pods/exec"]
+                    verbs: ["create", "get", "list", "watch", "delete"]
+
+            # ClusterRoleBinding
             - complianceType: musthave
               objectDefinition:
-                {{ fromFile "cronjob.yaml" }}
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: ClusterRoleBinding
+                metadata:
+                  name: etcd-backup
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: etcd-backup
+                subjects:
+                  - kind: ServiceAccount
+                    name: etcd-backup
+                    namespace: ocp-etcd-backup
+
+            # PersistentVolumeClaim
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: PersistentVolumeClaim
+                metadata:
+                  name: etcd-backup-pvc
+                  namespace: ocp-etcd-backup
+                spec:
+                  accessModes:
+                    - ReadWriteMany
+                  resources:
+                    requests:
+                      storage: 10Gi
+                  volumeName: ocp-etcd-backup  # Make sure this PV exists or is created separately
+
+            # CronJob
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: batch/v1
+                kind: CronJob
+                metadata:
+                  name: etcd-backup
+                  namespace: ocp-etcd-backup
+                spec:
+                  schedule: "0 */6 * * *"
+                  jobTemplate:
+                    spec:
+                      template:
+                        spec:
+                          serviceAccountName: etcd-backup
+                          restartPolicy: Never
+                          containers:
+                            - name: etcd-backup
+                              image: quay.io/openshift-release-dev/ocp-release:4.14.13-x86_64
+                              command:
+                                - /bin/bash
+                                - -c
+                                - |
+                                  oc debug node/$(oc get node -l node-role.kubernetes.io/master --no-headers | awk '{print $1}' | head -n1) -- chroot /host sudo /usr/local/bin/cluster-backup.sh /mnt/nfs/etcd-backups
+                              volumeMounts:
+                                - name: nfs
+                                  mountPath: /mnt/nfs/etcd-backups
+                          volumes:
+                            - name: nfs
+                              persistentVolumeClaim:
+                                claimName: etcd-backup-pvc
 
