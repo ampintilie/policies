@@ -128,7 +128,7 @@ spec:
                                 - /bin/bash
                                 - -c
                                 - |
-                                  oc debug node/$(oc get node -l node-role.kubernetes.io/master --no-headers | awk '{print $1}' | head -n1) -- chroot /host sudo /usr/local/bin/cluster-backup.sh /mnt/nfs/etcd-backups
+                                  chroot /host sudo /usr/local/bin/cluster-backup.sh /mnt/nfs/etcd-backups
                               volumeMounts:
                                 - name: nfs
                                   mountPath: /mnt/nfs/etcd-backups
