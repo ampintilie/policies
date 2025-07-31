@@ -41,6 +41,9 @@ spec:
                 metadata:
                   name: etcd-backup
                 rules:
+                  - apiGroups: [""]
+                    resources: ["namespaces"]
+                    verbs: ["get", "list"]
                   - apiGroups: ["*"]
                     resources: ["nodes", "pods", "pods/exec"]
                     verbs: ["create", "get", "list", "watch", "delete"]
