@@ -4,6 +4,5 @@ metadata:
   name: etcd-backup-placement
   namespace: acm-policies
 spec:
-  clusterSelector:
-    matchLabels:
-      environment: test
+  clusterSets:
+    - test
