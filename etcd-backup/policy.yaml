@@ -93,6 +93,7 @@ spec:
                     requests:
                       storage: 10Gi
                   volumeName: ocp-etcd-backup  # Make sure this PV exists or is created separately
+                  storageClassName: ""
 
             # CronJob
             - complianceType: musthave
