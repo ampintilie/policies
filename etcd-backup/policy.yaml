@@ -42,12 +42,19 @@ spec:
                   name: etcd-backup
                 rules:
                   - apiGroups: [""]
-                    resources: ["namespaces"]
-                    verbs: ["get", "list", "create", "delete"]
-                  - apiGroups: ["*"]
-                    resources: ["nodes", "pods", "pods/exec"]
-                    verbs: ["create", "get", "list", "watch", "delete"]
-
+                    resources:
+                       - "nodes"
+                    verbs: ["get", "list"]
+                  - apiGroups: [""]
+                    resources:
+                       - "pods"
+                       - "pods/log"
+                       - "pods/attach"
+                    verbs: ["get", "list", "create", "delete", "watch"]
+                  - apiGroups: [""]
+                    resources:
+                       - "namespaces"
+                    verbs: ["get", "list", "create"]
             # ClusterRoleBinding
             - complianceType: musthave
               objectDefinition:
