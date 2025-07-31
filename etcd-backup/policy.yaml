@@ -4,7 +4,7 @@ metadata:
   name: etcd-backup-policy
   namespace: acm-policies
 spec:
-  remediationAction: inform
+  remediationAction: enforce
   disabled: false
   policy-templates:
     - objectDefinition:
