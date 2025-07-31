@@ -113,7 +113,7 @@ spec:
                           restartPolicy: Never
                           containers:
                             - name: etcd-backup
-                              image: quay.io/openshift-release-dev/ocp-release:4.14.13-x86_64
+                              image: registry.redhat.io/openshift4/ose-cli:latest
                               command:
                                 - /bin/bash
                                 - -c
