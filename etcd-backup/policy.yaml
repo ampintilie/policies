@@ -65,7 +65,7 @@ spec:
                 roleRef:
                   apiGroup: rbac.authorization.k8s.io
                   kind: ClusterRole
-                  name: etcd-backup
+                  name: system:openshift:scc:privileged
                 subjects:
                   - kind: ServiceAccount
                     name: etcd-backup
