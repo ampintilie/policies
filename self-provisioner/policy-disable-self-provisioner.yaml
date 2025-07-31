@@ -17,7 +17,7 @@ spec:
         metadata:
           name: policy-remove-self-provisioner
         spec:
-          remediationAction: inform
+          remediationAction: enforce
           severity: low
           object-templates:
             - complianceType: mustonlyhave
