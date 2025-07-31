@@ -1,0 +1,5 @@
+resources:
+  - policy-disable-self-provisioner.yaml
+  - placement.yaml
+  - placementbinding.yaml
+
