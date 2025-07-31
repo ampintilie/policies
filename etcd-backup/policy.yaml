@@ -73,6 +73,7 @@ spec:
                   accessModes:
                     - ReadWriteMany
                   persistentVolumeReclaimPolicy: Retain
+                  storageClassName: ""
                   nfs:
                     path: /exports/etcd
                     server: 192.168.41.1
