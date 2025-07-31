@@ -43,7 +43,7 @@ spec:
                 rules:
                   - apiGroups: [""]
                     resources: ["namespaces"]
-                    verbs: ["get", "list"]
+                    verbs: ["get", "list", "create", "delete"]
                   - apiGroups: ["*"]
                     resources: ["nodes", "pods", "pods/exec"]
                     verbs: ["create", "get", "list", "watch", "delete"]
