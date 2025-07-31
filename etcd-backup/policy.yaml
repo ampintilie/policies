@@ -142,10 +142,10 @@ spec:
                               command:
                                 - "/bin/bash"
                                 - "-c"
-                                - oc get no -l node-role.kubernetes.io/master --no-headers -o name | head -n 1 |xargs -I {} -- oc debug {}  --to-namespace=ocp-etcd-backup -- bash -c 'chroot /host sudo -E /usr/local/bin/cluster-backup.sh /mnt/nfs/etcd-backups && chroot /host sudo -E find /mnt/nfs/etcd-backups -type f -mmin +"1" -delete'
+                                - oc get no -l node-role.kubernetes.io/master --no-headers -o name | head -n 1 |xargs -I {} -- oc debug {}  --to-namespace=ocp-etcd-backup -- bash -c 'chroot /host sudo -E /usr/local/bin/cluster-backup.sh /mnt/nfs && chroot /host sudo -E find /mnt/nfs -type f -mmin +"1" -delete'
                               volumeMounts:
                                 - name: nfs
-                                  mountPath: /mnt/nfs/etcd-backups
+                                  mountPath: /mnt/nfs
                           volumes:
                             - name: nfs
                               persistentVolumeClaim:
