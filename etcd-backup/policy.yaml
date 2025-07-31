@@ -60,7 +60,23 @@ spec:
                   - kind: ServiceAccount
                     name: etcd-backup
                     namespace: ocp-etcd-backup
-
+            # PV
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: PersistentVolume
+                metadata:
+                  name: ocp-etcd-backup
+                spec:
+                  capacity:
+                    storage: 10Gi
+                  accessModes:
+                    - ReadWriteMany
+                  persistentVolumeReclaimPolicy: Retain
+                  nfs:
+                    path: /exports/etcd
+                    server: 192.168.41.1
+                  volumeMode: Filesystem
             # PersistentVolumeClaim
             - complianceType: musthave
               objectDefinition:
