@@ -1,0 +1,32 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: etcd-backup-policy
+  namespace: acm-policies
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: ocp-etcd-backup
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: etcd-backup-config
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                {{ fromFile "etcd-pvc.yaml" }}
+            - complianceType: musthave
+              objectDefinition:
+                {{ fromFile "serviceaccount.yaml" }}
+            - complianceType: musthave
+              objectDefinition:
+                {{ fromFile "cronjob.yaml" }}
+

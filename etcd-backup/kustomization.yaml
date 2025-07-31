@@ -1,0 +1,7 @@
+resources:
+  - serviceaccount.yaml
+  - etcd-pvc.yaml
+  - cronjob.yaml
+  - policy.yaml
+  - placement.yaml
+  - placementbinding.yaml
