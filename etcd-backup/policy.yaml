@@ -8,12 +8,6 @@ spec:
   disabled: false
   policy-templates:
     - objectDefinition:
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: ocp-etcd-backup
-
-    - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
@@ -22,6 +16,14 @@ spec:
           remediationAction: enforce
           severity: low
           object-templates:
+            # Namespace
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: ocp-etcd-backup
+
             # ServiceAccount
             - complianceType: musthave
               objectDefinition:
