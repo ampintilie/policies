@@ -142,7 +142,7 @@ spec:
                               command:
                                 - "/bin/bash"
                                 - "-c"
-                                - oc get no -l node-role.kubernetes.io/master --no-headers -o name | head -n 1 |xargs -I {} -- oc debug {}  --to-namespace=ocp-etcd-backup -- bash -c 'chroot /host sudo -E /usr/local/bin/cluster-backup.sh /mnt/nfs'
+                                - oc get no -l node-role.kubernetes.io/master --no-headers -o name | head -n 1 |xargs -I {} -- oc debug {}  --to-namespace=ocp-etcd-backup -- bash -c 'chroot /host sudo -E /usr/local/bin/cluster-backup.sh /mnt/nfs && sleep 100'
                               volumeMounts:
                                 - name: nfs
                                   mountPath: /mnt/nfs
