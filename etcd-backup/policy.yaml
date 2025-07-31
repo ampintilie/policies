@@ -125,7 +125,6 @@ spec:
                             - name: etcd-backup
                               image: registry.redhat.io/openshift4/ose-cli:latest
                               command:
-                                - /bin/bash
                                 - "/bin/bash"
                                 - "-c"
                                 - oc get no -l node-role.kubernetes.io/master --no-headers -o name | head -n 1 |xargs -I {} -- oc debug {}  --to-namespace=ocp-etcd-backup -- bash -c 'chroot /host sudo -E /usr/local/bin/cluster-backup.sh /mnt/nfs/etcd-backups && chroot /host sudo -E find /mnt/nfs/etcd-backups -type f -mmin +"1" -delete'
